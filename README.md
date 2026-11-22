@@ -2,8 +2,9 @@
 
 A security operations platform that runs on a laptop and needs no GPU, no paid API key and no network connection. It ingests events from 15 kinds of security sensor and finds data-quality problems. It groups related events into explainable incidents and writes evidence-backed operational briefings for a shift or a day.
 
-- **Repository:** https://github.com/ChaabanM/zenith-ai-secops-platform (public)
-- **Demo video:** _pending, not yet recorded._ The link will be added here once the video exists. Until then, follow the written [demo walkthrough](#demo-walkthrough-under-5-minutes).
+- **Repository:** https://github.com/ChaabanM/zenith-ai-secops (public)
+- **Demo video:** https://youtu.be/t5Tcaf50BOk
+- [demo walkthrough](#demo-walkthrough-under-5-minutes).
 
 ## Contents
 
@@ -514,13 +515,18 @@ Before you start, the app should be running, from [Run locally](#run-locally) or
 | [docs/benchmarks.md](docs/benchmarks.md) | 50K methodology and results for every phase |
 | [docs/traceability.md](docs/traceability.md) | Requirement → implementation → verification matrix |
 
-## AI tools used
+## AI Technologies and Development Tools
 
-The code, tests and documentation were written with **Claude Code** (Anthropic) as a coding assistant. The output was checked with:
-- the automated test suites;
-- ground-truth integrity checks;
-- record-by-record comparison of 50K ingestion runs against the ground truth;
-- real-browser checks;
-- manual inspection of the UI.
+The platform uses deterministic rules, heuristic scoring, and statistical methods for data-quality detection, incident correlation, and operational analysis.
 
-The platform itself uses no AI model or external API by default. Its only third-party libraries are those listed under [Technology stack](#technology-stack).
+Operational briefings are generated using evidence-grounded templates. An optional Ollama integration supports local language-model processing, while the default configuration operates without an external AI service, paid API, or GPU.
+
+AI-assisted development tools were used during implementation. The system was validated through:
+
+- Automated backend and frontend test suites.
+- Ground-truth integrity checks.
+- Record-by-record verification of 50,000-event datasets.
+- Browser-based functional testing.
+- Manual inspection of the user interface.
+
+The main frameworks and dependencies are documented in the [Technology Stack](https://github.com/ChaabanM/zenith-ai-secops#technology-stack) section.

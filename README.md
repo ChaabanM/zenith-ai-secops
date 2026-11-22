@@ -27,7 +27,7 @@ A security operations platform that runs on a laptop and needs no GPU, no paid A
 17. [Known limitations](#known-limitations)
 18. [Demo walkthrough (under 5 minutes)](#demo-walkthrough-under-5-minutes)
 19. [Documentation index](#documentation-index)
-20. [AI tools used](#ai-tools-used)
+20. [AI Technologies and Development Tools](#ai-technologies-and-development-tools)
 
 ## The problem
 

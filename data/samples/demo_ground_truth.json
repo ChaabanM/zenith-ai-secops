@@ -1,0 +1,5636 @@
+{
+ "purpose": "EVALUATION ONLY. Never load into the platform; production logic must infer relationships from event evidence.",
+ "generator": {
+  "name": "zenith-datagen",
+  "version": "1.1.0",
+  "seed": 42,
+  "count": 500,
+  "profile": "mixed",
+  "start": "2026-01-12T00:00:00Z",
+  "end": "2026-01-15T00:00:00Z",
+  "days": 3.0,
+  "rates": {
+   "invalid": 0.03,
+   "duplicate": 0.02,
+   "delay": 0.02,
+   "low_confidence": 0.02
+  },
+  "scenario_scale": 1.0
+ },
+ "data_file": "data/samples/demo_events.json",
+ "index_note": "submission index is 0-based in file order; line = index + 1 (JSONL line number, JSON array position)",
+ "expected_outcomes": {
+  "total_submissions": 500,
+  "accepted": 475,
+  "invalid": 15,
+  "duplicate": 10,
+  "exact_duplicate": 5,
+  "conflicting_duplicate": 5
+ },
+ "source_counts": {
+  "access_control": 63,
+  "anpr": 74,
+  "cctv": 79,
+  "device_health": 23,
+  "emergency_alarm": 5,
+  "face_recognition": 17,
+  "gps_fleet": 48,
+  "mobile_phone_detection": 17,
+  "network_security": 43,
+  "operator_report": 6,
+  "perimeter_intrusion": 14,
+  "radar": 36,
+  "seatbelt_detection": 11,
+  "traffic_violation": 30,
+  "weather_environmental": 9
+ },
+ "scenario_counts": {
+  "A_multi_sensor_traffic_incident": 2,
+  "B_unauthorized_access": 1,
+  "C_perimeter_intrusion": 1,
+  "D_device_failure": 1,
+  "E_conflicting_sensors": 5,
+  "F_duplicate_events": 10,
+  "G_delayed_out_of_order": 3,
+  "H_malformed_incomplete": 1,
+  "I_low_confidence": 8,
+  "J_repeated_events_spikes": 4,
+  "K_unrelated_events": 4,
+  "L_ambiguous_uncorrelatable": 4
+ },
+ "scenario_variant_counts": {
+  "A:red_light": 2,
+  "B:outside_schedule": 1,
+  "C:beam_break": 1,
+  "D:radar": 1,
+  "E:conflicting_identity": 1,
+  "E:conflicting_locations": 1,
+  "E:conflicting_sensor_results": 1,
+  "E:conflicting_timestamps": 1,
+  "E:contradictory_vehicle_details": 1,
+  "F:altered": 5,
+  "F:exact": 5,
+  "G:clock_skew": 1,
+  "G:reverse_order_arrival": 1,
+  "G:store_and_forward_delay": 1,
+  "H:mixed_defects": 1,
+  "I:anpr_partial": 4,
+  "I:anpr_unreadable": 2,
+  "I:cctv": 2,
+  "J:access_failure_spike": 1,
+  "J:event_spike": 1,
+  "J:localized_cluster": 1,
+  "J:repeated_device_events": 1,
+  "K:same_device_separate_observations": 1,
+  "K:same_time_different_incidents": 1,
+  "K:same_zone_different_subjects": 1,
+  "K:similar_types_no_relation": 1,
+  "L:insufficient_linking_evidence": 1,
+  "L:missing_entity_identifiers": 1,
+  "L:missing_location": 1,
+  "L:unresolved_conflicting_evidence": 1
+ },
+ "anomaly_counts": {
+  "access_failure_repetition": 1,
+  "access_failure_spike": 1,
+  "conflicting_identity": 1,
+  "conflicting_locations": 1,
+  "conflicting_sensor_results": 1,
+  "conflicting_timestamps": 1,
+  "contradictory_vehicle_details": 1,
+  "delayed_event": 2,
+  "device_degraded": 1,
+  "device_offline": 1,
+  "device_recovered": 1,
+  "duplicate_conflicting": 5,
+  "duplicate_exact": 5,
+  "event_spike": 1,
+  "expected_absence": 1,
+  "invalid_record": 15,
+  "localized_cluster": 1,
+  "low_confidence_detection": 8,
+  "out_of_order_arrival": 1,
+  "repeated_device_events": 1,
+  "sensor_failure": 1,
+  "timestamp_inconsistency": 1
+ },
+ "scenarios": [
+  {
+   "scenario_id": "SCN-D-0001",
+   "type": "D_device_failure",
+   "variant": "radar",
+   "title": "radar-int03 degraded, failed and recovered",
+   "description": "Device health deteriorates, a sensor fault is reported, the device goes offline and later recovers. No observations from the device exist while it is offline.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-07a00822e8f3",
+    "evt-cf3647378190",
+    "evt-562bc37459ee",
+    "evt-18c26142ea7d",
+    "evt-43b79a8dca03",
+    "evt-1ff489463e85"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    4,
+    5,
+    7,
+    8,
+    10,
+    24
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "device_degraded",
+     "event_ids": [
+      "evt-07a00822e8f3",
+      "evt-cf3647378190",
+      "evt-562bc37459ee"
+     ],
+     "submission_indexes": [
+      4,
+      5,
+      7
+     ],
+     "detail": "high temperature / packet loss and low-quality output before failure"
+    },
+    {
+     "kind": "sensor_failure",
+     "event_ids": [
+      "evt-18c26142ea7d"
+     ],
+     "submission_indexes": [
+      8
+     ],
+     "detail": "E-RADAR-TX-POWER"
+    },
+    {
+     "kind": "device_offline",
+     "event_ids": [
+      "evt-43b79a8dca03"
+     ],
+     "submission_indexes": [
+      10
+     ],
+     "detail": "heartbeat lost"
+    },
+    {
+     "kind": "device_recovered",
+     "event_ids": [
+      "evt-1ff489463e85"
+     ],
+     "submission_indexes": [
+      24
+     ],
+     "detail": "device back online"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": [
+    {
+     "device_id": "radar-int03",
+     "source_type": "radar",
+     "from": "2026-01-12T02:14:17.944000Z",
+     "to": "2026-01-12T05:31:33.387000Z",
+     "detail": "no observations expected while the device is offline; absence is not represented by events"
+    }
+   ]
+  },
+  {
+   "scenario_id": "SCN-A-0001",
+   "type": "A_multi_sensor_traffic_incident",
+   "variant": "red_light",
+   "title": "red-light violation with multiple sensor captures at Industrial-Ave-INT04",
+   "description": "One vehicle observed by radar/enforcement camera, ANPR and CCTV within seconds at the same site; plate and radar track id link the enforcement records, CCTV links only by time, place and appearance.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-19dbddd1dfb2",
+    "evt-ab9035a240ae",
+    "evt-451b6123fdf7",
+    "evt-af423838b326"
+   ],
+   "unrelated_event_ids": [
+    "evt-e27a654821d0"
+   ],
+   "submission_indexes": [
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-B-0001",
+   "type": "B_unauthorized_access",
+   "variant": "outside_schedule",
+   "title": "Repeated denied access at Gate-C",
+   "description": "Several denied badge attempts with one credential, followed by camera and operator observations at the same door.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-e5d76dadd6c7",
+    "evt-ff5eff50bde4",
+    "evt-0c0fc17af08a",
+    "evt-cac528f49481",
+    "evt-61b162801c45",
+    "evt-b881ae270da7",
+    "evt-6f4c4b22d308"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    101
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "access_failure_repetition",
+     "event_ids": [
+      "evt-e5d76dadd6c7",
+      "evt-ff5eff50bde4",
+      "evt-0c0fc17af08a",
+      "evt-cac528f49481",
+      "evt-61b162801c45"
+     ],
+     "submission_indexes": [
+      93,
+      94,
+      95,
+      96,
+      97
+     ],
+     "detail": "5 denied attempts with credential CRD-29681"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-C-0001",
+   "type": "C_perimeter_intrusion",
+   "variant": "beam_break",
+   "title": "Perimeter intrusion alarm at Perimeter-North",
+   "description": "Perimeter sensor alarm, camera detection, panel alarm and an operator follow-up at the same fence section.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-295bc333e861",
+    "evt-7d1552fbe43b",
+    "evt-fc3ee0f3eab0",
+    "evt-bb5e15ed6269"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    285,
+    286,
+    287,
+    289
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-E-0001",
+   "type": "E_conflicting_sensors",
+   "variant": "contradictory_vehicle_details",
+   "title": "Same plate, contradictory vehicle details at Harbour-Rd-INT01",
+   "description": "ANPR and enforcement camera read the same plate seconds apart but report different make/colour (possible cloned plate or misread). A similar vehicle with a different plate passes shortly after and is unrelated.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-a65eabf3ad39",
+    "evt-1efa7394988f"
+   ],
+   "unrelated_event_ids": [
+    "evt-a18fb535106e"
+   ],
+   "submission_indexes": [
+    66,
+    67,
+    68
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [
+    {
+     "kind": "contradictory_vehicle_details",
+     "event_ids": [
+      "evt-a65eabf3ad39",
+      "evt-1efa7394988f"
+     ],
+     "submission_indexes": [
+      66,
+      67
+     ],
+     "detail": "plate W 31643: gold Nissan vs silver Hyundai"
+    }
+   ],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-G-0001",
+   "type": "G_delayed_out_of_order",
+   "variant": "reverse_order_arrival",
+   "title": "FLT-02 position trail delivered in reverse order",
+   "description": "A buffered GPS trail is uploaded after a coverage gap; records arrive newest-first.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-21df8a0b3c33",
+    "evt-c8dc3e351128",
+    "evt-a8b318d0752b",
+    "evt-dd24778eedb3"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    458,
+    459,
+    460,
+    461
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "out_of_order_arrival",
+     "event_ids": [
+      "evt-21df8a0b3c33",
+      "evt-c8dc3e351128",
+      "evt-a8b318d0752b",
+      "evt-dd24778eedb3"
+     ],
+     "submission_indexes": [
+      458,
+      459,
+      460,
+      461
+     ],
+     "detail": "arrival order is the reverse of occurrence order"
+    },
+    {
+     "kind": "delayed_event",
+     "event_ids": [
+      "evt-21df8a0b3c33",
+      "evt-c8dc3e351128",
+      "evt-a8b318d0752b",
+      "evt-dd24778eedb3"
+     ],
+     "submission_indexes": [
+      458,
+      459,
+      460,
+      461
+     ],
+     "detail": "delivered 728s+ after the first position"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-J-0001",
+   "type": "J_repeated_events_spikes",
+   "variant": "repeated_device_events",
+   "title": "Repeated motion alerts from cctv-perim-north",
+   "description": "One camera raises the same alert many times in 15 minutes (likely nuisance trigger).",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-30b1310c0c00",
+    "evt-dfde3ff350bf",
+    "evt-0cf319108be5",
+    "evt-c0e9ed2662e9",
+    "evt-66aadd59ba71",
+    "evt-ed3043e458fc",
+    "evt-c88afed4057d",
+    "evt-f7fd37bb3eec",
+    "evt-0cd60ea2622b",
+    "evt-f5f50e8fa8e0",
+    "evt-dca0acdabacc",
+    "evt-983294340a03"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    52,
+    53,
+    54
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "repeated_device_events",
+     "event_ids": [
+      "evt-30b1310c0c00",
+      "evt-dfde3ff350bf",
+      "evt-0cf319108be5",
+      "evt-c0e9ed2662e9",
+      "evt-66aadd59ba71",
+      "evt-ed3043e458fc",
+      "evt-c88afed4057d",
+      "evt-f7fd37bb3eec",
+      "evt-0cd60ea2622b",
+      "evt-f5f50e8fa8e0",
+      "evt-dca0acdabacc",
+      "evt-983294340a03"
+     ],
+     "submission_indexes": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      52,
+      53,
+      54
+     ],
+     "detail": "12 motion alerts in 15 minutes"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-K-0001",
+   "type": "K_unrelated_events",
+   "variant": "same_zone_different_subjects",
+   "title": "Two different vehicles at Harbour-Rd-INT01 within seconds",
+   "description": "Same place and almost the same time, different plates: separate observations.",
+   "expected_incident": "separate",
+   "related_event_ids": [],
+   "unrelated_event_ids": [
+    "evt-1292ef8c485b",
+    "evt-43e48181a8cc",
+    "evt-702c286218b8"
+   ],
+   "submission_indexes": [
+    214,
+    215,
+    216
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-L-0001",
+   "type": "L_ambiguous_uncorrelatable",
+   "variant": "missing_entity_identifiers",
+   "title": "Person and partial plate in Car-Park-P2",
+   "description": "No track id and only a partial plate: there is no evidence that these observations are linked.",
+   "expected_incident": "uncertain",
+   "related_event_ids": [
+    "evt-ce9efcbb4e59",
+    "evt-0cbd9e2aa4ac"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    351,
+    353
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "missing_entity_identifier",
+     "event_ids": [
+      "evt-ce9efcbb4e59",
+      "evt-0cbd9e2aa4ac"
+     ],
+     "submission_indexes": [
+      351,
+      353
+     ],
+     "detail": "no stable identifier to link the person and the vehicle"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-A-0002",
+   "type": "A_multi_sensor_traffic_incident",
+   "variant": "red_light",
+   "title": "red-light violation with multiple sensor captures at Airport-Link-INT03",
+   "description": "One vehicle observed by radar/enforcement camera, ANPR and CCTV within seconds at the same site; plate and radar track id link the enforcement records, CCTV links only by time, place and appearance.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-86e57c93f6cc",
+    "evt-f2004d29d1ab",
+    "evt-7f5401fa964e",
+    "evt-ab05d556b37d",
+    "evt-6fac0ad45230"
+   ],
+   "unrelated_event_ids": [
+    "evt-5324f758dce2"
+   ],
+   "submission_indexes": [
+    231,
+    232,
+    233,
+    234,
+    235,
+    236
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-E-0002",
+   "type": "E_conflicting_sensors",
+   "variant": "conflicting_identity",
+   "title": "Badge holder and recognised face disagree at Gate-A",
+   "description": "A credential belonging to one employee is used while face recognition matches a different enrolled employee at the same door (possible credential sharing or misidentification).",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-6fcc168fae12",
+    "evt-6f883e49fd09"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    485,
+    486
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [
+    {
+     "kind": "conflicting_identity",
+     "event_ids": [
+      "evt-6fcc168fae12",
+      "evt-6f883e49fd09"
+     ],
+     "submission_indexes": [
+      485,
+      486
+     ],
+     "detail": "credential holder EMP-1354 vs face match EMP-1186"
+    }
+   ],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-G-0002",
+   "type": "G_delayed_out_of_order",
+   "variant": "clock_skew",
+   "title": "cctv-depot reports timestamps in the future",
+   "description": "The device clock runs ahead: occurred_at is later than received_at (suspicious but structurally valid).",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-c7745543fc3c",
+    "evt-82af138d994c",
+    "evt-87d51d30d990"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    25,
+    32,
+    37
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "timestamp_inconsistency",
+     "event_ids": [
+      "evt-c7745543fc3c",
+      "evt-82af138d994c",
+      "evt-87d51d30d990"
+     ],
+     "submission_indexes": [
+      25,
+      32,
+      37
+     ],
+     "detail": "received_at earlier than occurred_at by about 493s"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-J-0002",
+   "type": "J_repeated_events_spikes",
+   "variant": "access_failure_spike",
+   "title": "Spike of denied access at Gate-B",
+   "description": "Many different valid staff credentials denied within 5 minutes (reader fault or controller sync issue, not one intruder).",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-d0a6a53bc024",
+    "evt-2c6a328067a1",
+    "evt-2d59134a5a2f",
+    "evt-9050c1235c91",
+    "evt-9082e1cde87f",
+    "evt-a091f891b0c3",
+    "evt-a1a271348c2a",
+    "evt-81e05a18e2a3",
+    "evt-5e650e9058b6",
+    "evt-daf4fa34d2e8"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    464,
+    465,
+    466,
+    468,
+    469,
+    470,
+    471,
+    472,
+    473,
+    474
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "access_failure_spike",
+     "event_ids": [
+      "evt-d0a6a53bc024",
+      "evt-2c6a328067a1",
+      "evt-2d59134a5a2f",
+      "evt-9050c1235c91",
+      "evt-9082e1cde87f",
+      "evt-a091f891b0c3",
+      "evt-a1a271348c2a",
+      "evt-81e05a18e2a3",
+      "evt-5e650e9058b6",
+      "evt-daf4fa34d2e8"
+     ],
+     "submission_indexes": [
+      464,
+      465,
+      466,
+      468,
+      469,
+      470,
+      471,
+      472,
+      473,
+      474
+     ],
+     "detail": "10 denials across different credentials in 5 minutes"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-K-0002",
+   "type": "K_unrelated_events",
+   "variant": "same_time_different_incidents",
+   "title": "Access denial and fence alarm in the same minute",
+   "description": "Simultaneous events in different areas with no shared subject: separate.",
+   "expected_incident": "separate",
+   "related_event_ids": [],
+   "unrelated_event_ids": [
+    "evt-0a80e5582e16",
+    "evt-524f30307633"
+   ],
+   "submission_indexes": [
+    247,
+    248
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-L-0002",
+   "type": "L_ambiguous_uncorrelatable",
+   "variant": "insufficient_linking_evidence",
+   "title": "Vague report and later weak fence alert at Perimeter-East",
+   "description": "Same area, half an hour apart, no shared identifier: possibly related, cannot be confirmed.",
+   "expected_incident": "uncertain",
+   "related_event_ids": [
+    "evt-812a15969802",
+    "evt-fdb17010ed13"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    488,
+    491
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "insufficient_linking_evidence",
+     "event_ids": [
+      "evt-812a15969802",
+      "evt-fdb17010ed13"
+     ],
+     "submission_indexes": [
+      488,
+      491
+     ],
+     "detail": "only zone proximity; 20-45 minutes apart"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-E-0003",
+   "type": "E_conflicting_sensors",
+   "variant": "conflicting_timestamps",
+   "title": "Radar and enforcement camera timestamps disagree at Expressway-Exit21-INT06",
+   "description": "The violation record references the radar track id of a radar event but its occurred_at is several minutes earlier (camera clock drift).",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-62f5adaa44ca",
+    "evt-f6e3a8149562"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    332,
+    333
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [
+    {
+     "kind": "conflicting_timestamps",
+     "event_ids": [
+      "evt-62f5adaa44ca",
+      "evt-f6e3a8149562"
+     ],
+     "submission_indexes": [
+      332,
+      333
+     ],
+     "detail": "same radar track T16863, occurred_at differs by 571s"
+    }
+   ],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-J-0003",
+   "type": "J_repeated_events_spikes",
+   "variant": "event_spike",
+   "title": "Password-guessing burst against emp1039",
+   "description": "Burst of failed logins from one external address, followed by a success (possible account compromise).",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-4f4015b02530",
+    "evt-d02c54170a17",
+    "evt-bd20f275b5f3",
+    "evt-a56117ec889c",
+    "evt-5cd304aac1b7",
+    "evt-f29a577bc55a",
+    "evt-2337fffe77c8",
+    "evt-19e4c9c23e69",
+    "evt-e238bd17c5e8",
+    "evt-c42ce05b46c5",
+    "evt-2989277d1be9",
+    "evt-cf1d9feefdff",
+    "evt-692e0b2f6d5c",
+    "evt-71b7f836f571",
+    "evt-72ecc8a723e9",
+    "evt-4f393d3a2582"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "event_spike",
+     "event_ids": [
+      "evt-4f4015b02530",
+      "evt-d02c54170a17",
+      "evt-bd20f275b5f3",
+      "evt-a56117ec889c",
+      "evt-5cd304aac1b7",
+      "evt-f29a577bc55a",
+      "evt-2337fffe77c8",
+      "evt-19e4c9c23e69",
+      "evt-e238bd17c5e8",
+      "evt-c42ce05b46c5",
+      "evt-2989277d1be9",
+      "evt-cf1d9feefdff",
+      "evt-692e0b2f6d5c",
+      "evt-71b7f836f571",
+      "evt-72ecc8a723e9"
+     ],
+     "submission_indexes": [
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91
+     ],
+     "detail": "15 failures from 203.0.113.35 in 3 minutes"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-K-0003",
+   "type": "K_unrelated_events",
+   "variant": "same_device_separate_observations",
+   "title": "Two speeding measurements by radar-int04",
+   "description": "Same device, same event type, different radar tracks minutes apart: different vehicles.",
+   "expected_incident": "separate",
+   "related_event_ids": [],
+   "unrelated_event_ids": [
+    "evt-61c2c7332304",
+    "evt-a4240d5ba7cd"
+   ],
+   "submission_indexes": [
+    457,
+    463
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-L-0003",
+   "type": "L_ambiguous_uncorrelatable",
+   "variant": "unresolved_conflicting_evidence",
+   "title": "Weak face candidate and a different badge holder at Gate-B",
+   "description": "Evidence points to different people but the face match is too weak to call it a conflict; unresolved.",
+   "expected_incident": "uncertain",
+   "related_event_ids": [
+    "evt-c35b1578d709",
+    "evt-25b8836b15c7"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    355,
+    356
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "unresolved_conflict",
+     "event_ids": [
+      "evt-c35b1578d709",
+      "evt-25b8836b15c7"
+     ],
+     "submission_indexes": [
+      355,
+      356
+     ],
+     "detail": "face candidate EMP-1146 (0.58) vs credential holder EMP-1064"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-E-0004",
+   "type": "E_conflicting_sensors",
+   "variant": "conflicting_locations",
+   "title": "Fleet vehicle FLT-02 reported in two distant places",
+   "description": "GPS places the vehicle at the depot while ANPR at Airport-Link-INT03, 5.2 km away, reads its plate 40 seconds later (GPS fault or cloned plate).",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-06d3ee33688d",
+    "evt-14e4fe9936a3"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    483,
+    484
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [
+    {
+     "kind": "conflicting_locations",
+     "event_ids": [
+      "evt-06d3ee33688d",
+      "evt-14e4fe9936a3"
+     ],
+     "submission_indexes": [
+      483,
+      484
+     ],
+     "detail": "5.2 km apart within 40 s"
+    }
+   ],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-J-0004",
+   "type": "J_repeated_events_spikes",
+   "variant": "localized_cluster",
+   "title": "Cluster of speeding violations at Harbour-Rd-INT01",
+   "description": "Many different vehicles speeding at one site within 20 minutes: a location trend, not one incident.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-1448e7e646c7",
+    "evt-f0b28c7e6f42",
+    "evt-e7b7d6312a80",
+    "evt-933683efa9f3",
+    "evt-11535c508720",
+    "evt-81f3fd034ada",
+    "evt-a837bba205ca",
+    "evt-2227551ff086",
+    "evt-752af1901b7e",
+    "evt-e2c333107475"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    167,
+    168,
+    169,
+    170,
+    174,
+    175,
+    176,
+    177,
+    178,
+    179
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "localized_cluster",
+     "event_ids": [
+      "evt-1448e7e646c7",
+      "evt-f0b28c7e6f42",
+      "evt-e7b7d6312a80",
+      "evt-933683efa9f3",
+      "evt-11535c508720",
+      "evt-81f3fd034ada",
+      "evt-a837bba205ca",
+      "evt-2227551ff086",
+      "evt-752af1901b7e",
+      "evt-e2c333107475"
+     ],
+     "submission_indexes": [
+      167,
+      168,
+      169,
+      170,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179
+     ],
+     "detail": "5 vehicles in 20 minutes"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-K-0004",
+   "type": "K_unrelated_events",
+   "variant": "similar_types_no_relation",
+   "title": "Red-light violations at two intersections in the same minute",
+   "description": "Similar event types, different places and vehicles: no relationship.",
+   "expected_incident": "separate",
+   "related_event_ids": [],
+   "unrelated_event_ids": [
+    "evt-a7dedda4f4a7",
+    "evt-f94556cb1ab0"
+   ],
+   "submission_indexes": [
+    198,
+    199
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-L-0004",
+   "type": "L_ambiguous_uncorrelatable",
+   "variant": "missing_location",
+   "title": "Network alert with no asset or location mapping",
+   "description": "Internal host is not in the asset register; the alert cannot be tied to a site or device.",
+   "expected_incident": "uncertain",
+   "related_event_ids": [
+    "evt-9a3a6e3c4532"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    408
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "uncorrelatable_event",
+     "event_ids": [
+      "evt-9a3a6e3c4532"
+     ],
+     "submission_indexes": [
+      408
+     ],
+     "detail": "no location and unknown asset owner"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-E-0005",
+   "type": "E_conflicting_sensors",
+   "variant": "conflicting_sensor_results",
+   "title": "Fence sensor alarm not confirmed by camera at Perimeter-North",
+   "description": "The fence sensor reports a cut while the camera covering the section reports no activity seconds later.",
+   "expected_incident": true,
+   "related_event_ids": [
+    "evt-4e764baf0f5e",
+    "evt-6d15b7b8c1a5"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    172,
+    173
+   ],
+   "expected_anomalies": [],
+   "expected_conflicts": [
+    {
+     "kind": "conflicting_sensor_results",
+     "event_ids": [
+      "evt-4e764baf0f5e",
+      "evt-6d15b7b8c1a5"
+     ],
+     "submission_indexes": [
+      172,
+      173
+     ],
+     "detail": "fence_cut alarm vs camera verification no_activity"
+    }
+   ],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-G-0003",
+   "type": "G_delayed_out_of_order",
+   "variant": "store_and_forward_delay",
+   "title": "cctv-cpport uploads buffered events late",
+   "description": "Device lost its uplink and forwarded its buffered events in one burst after reconnecting.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-113620509c62",
+    "evt-62025cb5e69c",
+    "evt-f2e6732e2016",
+    "evt-92ec13aec376",
+    "evt-a649507b9072",
+    "evt-bc5506a241af",
+    "evt-8fc9e9ddebf5",
+    "evt-723eb43bd27f",
+    "evt-ea9eb1a8b71f",
+    "evt-12f5da52d2ee"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    250,
+    251,
+    252,
+    253,
+    254,
+    255,
+    256,
+    257,
+    258,
+    259
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "delayed_event",
+     "event_ids": [
+      "evt-113620509c62",
+      "evt-62025cb5e69c",
+      "evt-f2e6732e2016",
+      "evt-92ec13aec376",
+      "evt-a649507b9072",
+      "evt-bc5506a241af",
+      "evt-8fc9e9ddebf5",
+      "evt-723eb43bd27f",
+      "evt-ea9eb1a8b71f",
+      "evt-12f5da52d2ee"
+     ],
+     "submission_indexes": [
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      257,
+      258,
+      259
+     ],
+     "detail": "delays between 2124s and 8483s"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0001",
+   "type": "I_low_confidence",
+   "variant": "anpr_partial",
+   "title": "Unreliable plate read on anpr-int03",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-6c4c623ad0fc"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    452
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-6c4c623ad0fc"
+     ],
+     "submission_indexes": [
+      452
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-6c4c623ad0fc"
+     ],
+     "submission_indexes": [
+      452
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0002",
+   "type": "I_low_confidence",
+   "variant": "cctv",
+   "title": "Low-confidence detection on cctv-int06",
+   "description": "Video analytics detection with very low confidence (poor light).",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-dd920db977a9",
+    "evt-d0b131f3f0c0"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    274,
+    275
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-dd920db977a9",
+      "evt-d0b131f3f0c0"
+     ],
+     "submission_indexes": [
+      274,
+      275
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-dd920db977a9",
+      "evt-d0b131f3f0c0"
+     ],
+     "submission_indexes": [
+      274,
+      275
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0003",
+   "type": "I_low_confidence",
+   "variant": "anpr_partial",
+   "title": "Unreliable plate read on anpr-cp12",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-6dd46744cb9e"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    428
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-6dd46744cb9e"
+     ],
+     "submission_indexes": [
+      428
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-6dd46744cb9e"
+     ],
+     "submission_indexes": [
+      428
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0004",
+   "type": "I_low_confidence",
+   "variant": "anpr_partial",
+   "title": "Unreliable plate read on anpr-int01",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-750a2cbfb769"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    14
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-750a2cbfb769"
+     ],
+     "submission_indexes": [
+      14
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-750a2cbfb769"
+     ],
+     "submission_indexes": [
+      14
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0005",
+   "type": "I_low_confidence",
+   "variant": "anpr_partial",
+   "title": "Unreliable plate read on anpr-int06",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-56d207faf6f7"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    347
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-56d207faf6f7"
+     ],
+     "submission_indexes": [
+      347
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-56d207faf6f7"
+     ],
+     "submission_indexes": [
+      347
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0006",
+   "type": "I_low_confidence",
+   "variant": "cctv",
+   "title": "Low-confidence detection on cctv-perim-north",
+   "description": "Video analytics detection with very low confidence (poor light).",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-0818b5b81351",
+    "evt-73b05f2019ea"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    123,
+    124
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-0818b5b81351",
+      "evt-73b05f2019ea"
+     ],
+     "submission_indexes": [
+      123,
+      124
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-0818b5b81351",
+      "evt-73b05f2019ea"
+     ],
+     "submission_indexes": [
+      123,
+      124
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0007",
+   "type": "I_low_confidence",
+   "variant": "anpr_unreadable",
+   "title": "Unreliable plate read on anpr-int04",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-d385d2a2f839"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    297
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-d385d2a2f839"
+     ],
+     "submission_indexes": [
+      297
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-d385d2a2f839"
+     ],
+     "submission_indexes": [
+      297
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-I-0008",
+   "type": "I_low_confidence",
+   "variant": "anpr_unreadable",
+   "title": "Unreliable plate read on anpr-cpport",
+   "description": "ANPR could not read the plate reliably; the vehicle identity is unknown.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-5c39bc0dbd13"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    320
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-5c39bc0dbd13"
+     ],
+     "submission_indexes": [
+      320
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [
+    {
+     "kind": "low_confidence_detection",
+     "event_ids": [
+      "evt-5c39bc0dbd13"
+     ],
+     "submission_indexes": [
+      320
+     ],
+     "detail": "confidence below 0.6"
+    }
+   ],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-H-0001",
+   "type": "H_malformed_incomplete",
+   "variant": "mixed_defects",
+   "title": "Malformed and incomplete submissions",
+   "description": "Records that must be rejected: missing mandatory fields, wrong types, invalid values and unparseable lines.",
+   "expected_incident": false,
+   "related_event_ids": [],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    11,
+    39,
+    62,
+    144,
+    157,
+    185,
+    228,
+    237,
+    271,
+    302,
+    397,
+    402,
+    434,
+    487,
+    496
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      496
+     ],
+     "detail": "missing_event_id"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      271
+     ],
+     "detail": "missing_source_type"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      487
+     ],
+     "detail": "missing_device_id"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      185
+     ],
+     "detail": "missing_occurred_at"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      11
+     ],
+     "detail": "missing_event_type"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      144
+     ],
+     "detail": "wrong_type_device_id"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      157
+     ],
+     "detail": "wrong_type_confidence"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      228
+     ],
+     "detail": "invalid_timestamp_format"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      402
+     ],
+     "detail": "invalid_timestamp_value"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      62
+     ],
+     "detail": "timestamp_missing_timezone"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      397
+     ],
+     "detail": "invalid_latitude"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      434
+     ],
+     "detail": "invalid_longitude"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      39
+     ],
+     "detail": "confidence_above_one"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      302
+     ],
+     "detail": "confidence_negative"
+    },
+    {
+     "kind": "invalid_record",
+     "event_ids": [],
+     "submission_indexes": [
+      237
+     ],
+     "detail": "unknown_source_type"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0001",
+   "type": "F_duplicate_events",
+   "variant": "exact",
+   "title": "Repeated submissions of evt-af423838b326",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-af423838b326"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    35
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_exact",
+     "event_ids": [
+      "evt-af423838b326"
+     ],
+     "submission_indexes": [
+      28,
+      35
+     ],
+     "detail": "submission 35 repeats submission 28"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0002",
+   "type": "F_duplicate_events",
+   "variant": "altered",
+   "title": "Repeated submissions of evt-0c0fc17af08a",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-0c0fc17af08a"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    103
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_conflicting",
+     "event_ids": [
+      "evt-0c0fc17af08a"
+     ],
+     "submission_indexes": [
+      95,
+      103
+     ],
+     "detail": "submission 103 repeats submission 95"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0003",
+   "type": "F_duplicate_events",
+   "variant": "exact",
+   "title": "Repeated submissions of evt-e2c333107475",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-e2c333107475"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    180
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_exact",
+     "event_ids": [
+      "evt-e2c333107475"
+     ],
+     "submission_indexes": [
+      177,
+      180
+     ],
+     "detail": "submission 180 repeats submission 177"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0004",
+   "type": "F_duplicate_events",
+   "variant": "altered",
+   "title": "Repeated submissions of evt-af3278cf536a",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-af3278cf536a"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    301
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_conflicting",
+     "event_ids": [
+      "evt-af3278cf536a"
+     ],
+     "submission_indexes": [
+      283,
+      301
+     ],
+     "detail": "submission 301 repeats submission 283"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0005",
+   "type": "F_duplicate_events",
+   "variant": "exact",
+   "title": "Repeated submissions of evt-9dc331523136",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-9dc331523136"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    387
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_exact",
+     "event_ids": [
+      "evt-9dc331523136"
+     ],
+     "submission_indexes": [
+      381,
+      387
+     ],
+     "detail": "submission 387 repeats submission 381"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0006",
+   "type": "F_duplicate_events",
+   "variant": "altered",
+   "title": "Repeated submissions of evt-fa3bc4844743",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-fa3bc4844743"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    316
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_conflicting",
+     "event_ids": [
+      "evt-fa3bc4844743"
+     ],
+     "submission_indexes": [
+      296,
+      316
+     ],
+     "detail": "submission 316 repeats submission 296"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0007",
+   "type": "F_duplicate_events",
+   "variant": "exact",
+   "title": "Repeated submissions of evt-1a5878ccd788",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-1a5878ccd788"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    422
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_exact",
+     "event_ids": [
+      "evt-1a5878ccd788"
+     ],
+     "submission_indexes": [
+      421,
+      422
+     ],
+     "detail": "submission 422 repeats submission 421"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0008",
+   "type": "F_duplicate_events",
+   "variant": "altered",
+   "title": "Repeated submissions of evt-90a623f2f68f",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-90a623f2f68f"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    393
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_conflicting",
+     "event_ids": [
+      "evt-90a623f2f68f"
+     ],
+     "submission_indexes": [
+      388,
+      393
+     ],
+     "detail": "submission 393 repeats submission 388"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0009",
+   "type": "F_duplicate_events",
+   "variant": "exact",
+   "title": "Repeated submissions of evt-fe33e8e91639",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-fe33e8e91639"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    102
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_exact",
+     "event_ids": [
+      "evt-fe33e8e91639"
+     ],
+     "submission_indexes": [
+      100,
+      102
+     ],
+     "detail": "submission 102 repeats submission 100"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  },
+  {
+   "scenario_id": "SCN-F-0010",
+   "type": "F_duplicate_events",
+   "variant": "altered",
+   "title": "Repeated submissions of evt-25dba5349425",
+   "description": "The same event_id is submitted more than once: identical retransmission and/or a re-sent version with changed values.",
+   "expected_incident": false,
+   "related_event_ids": [
+    "evt-25dba5349425"
+   ],
+   "unrelated_event_ids": [],
+   "submission_indexes": [
+    210
+   ],
+   "expected_anomalies": [
+    {
+     "kind": "duplicate_conflicting",
+     "event_ids": [
+      "evt-25dba5349425"
+     ],
+     "submission_indexes": [
+      191,
+      210
+     ],
+     "detail": "submission 210 repeats submission 191"
+    }
+   ],
+   "expected_conflicts": [],
+   "expected_uncertainty": [],
+   "expected_absences": []
+  }
+ ],
+ "must_remain_separate": [
+  {
+   "scenario_id": "SCN-A-0001",
+   "reason": "One vehicle observed by radar/enforcement camera, ANPR and CCTV within seconds at the same site; plate and radar track id link the enforcement records, CCTV links only by time, place and appearance.",
+   "groups": [
+    [
+     "evt-19dbddd1dfb2",
+     "evt-ab9035a240ae",
+     "evt-451b6123fdf7",
+     "evt-af423838b326"
+    ],
+    [
+     "evt-e27a654821d0"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-E-0001",
+   "reason": "ANPR and enforcement camera read the same plate seconds apart but report different make/colour (possible cloned plate or misread). A similar vehicle with a different plate passes shortly after and is unrelated.",
+   "groups": [
+    [
+     "evt-a65eabf3ad39",
+     "evt-1efa7394988f"
+    ],
+    [
+     "evt-a18fb535106e"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-K-0001",
+   "reason": "Same place and almost the same time, different plates: separate observations.",
+   "groups": [
+    [
+     "evt-1292ef8c485b"
+    ],
+    [
+     "evt-43e48181a8cc",
+     "evt-702c286218b8"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-A-0002",
+   "reason": "One vehicle observed by radar/enforcement camera, ANPR and CCTV within seconds at the same site; plate and radar track id link the enforcement records, CCTV links only by time, place and appearance.",
+   "groups": [
+    [
+     "evt-86e57c93f6cc",
+     "evt-f2004d29d1ab",
+     "evt-7f5401fa964e",
+     "evt-ab05d556b37d",
+     "evt-6fac0ad45230"
+    ],
+    [
+     "evt-5324f758dce2"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-K-0002",
+   "reason": "Simultaneous events in different areas with no shared subject: separate.",
+   "groups": [
+    [
+     "evt-0a80e5582e16"
+    ],
+    [
+     "evt-524f30307633"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-K-0003",
+   "reason": "Same device, same event type, different radar tracks minutes apart: different vehicles.",
+   "groups": [
+    [
+     "evt-61c2c7332304"
+    ],
+    [
+     "evt-a4240d5ba7cd"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-J-0004",
+   "reason": "Many different vehicles speeding at one site within 20 minutes: a location trend, not one incident.",
+   "groups": [
+    [
+     "evt-1448e7e646c7",
+     "evt-f0b28c7e6f42"
+    ],
+    [
+     "evt-e7b7d6312a80",
+     "evt-933683efa9f3"
+    ],
+    [
+     "evt-11535c508720",
+     "evt-81f3fd034ada"
+    ],
+    [
+     "evt-a837bba205ca",
+     "evt-2227551ff086"
+    ],
+    [
+     "evt-752af1901b7e",
+     "evt-e2c333107475"
+    ]
+   ]
+  },
+  {
+   "scenario_id": "SCN-K-0004",
+   "reason": "Similar event types, different places and vehicles: no relationship.",
+   "groups": [
+    [
+     "evt-a7dedda4f4a7"
+    ],
+    [
+     "evt-f94556cb1ab0"
+    ]
+   ]
+  }
+ ],
+ "submissions": [
+  {
+   "index": 0,
+   "line": 1,
+   "event_id": "evt-ee2690f1c7ee",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 1,
+   "line": 2,
+   "event_id": "evt-2eb8172f0d9b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 2,
+   "line": 3,
+   "event_id": "evt-5f2d3a769378",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 3,
+   "line": 4,
+   "event_id": "evt-9ef1a2f077e3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 4,
+   "line": 5,
+   "event_id": "evt-07a00822e8f3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 5,
+   "line": 6,
+   "event_id": "evt-cf3647378190",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 6,
+   "line": 7,
+   "event_id": "evt-4985c54f447e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 7,
+   "line": 8,
+   "event_id": "evt-562bc37459ee",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 8,
+   "line": 9,
+   "event_id": "evt-18c26142ea7d",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 9,
+   "line": 10,
+   "event_id": "evt-26536a9f687a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 10,
+   "line": 11,
+   "event_id": "evt-43b79a8dca03",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 11,
+   "line": 12,
+   "event_id": "evt-9e181d2d1771",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "missing_event_type"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 12,
+   "line": 13,
+   "event_id": "evt-5b50e6dc9c76",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 13,
+   "line": 14,
+   "event_id": "evt-183588f4ca54",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 14,
+   "line": 15,
+   "event_id": "evt-750a2cbfb769",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0004"
+   ]
+  },
+  {
+   "index": 15,
+   "line": 16,
+   "event_id": "evt-604f961a9968",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 16,
+   "line": 17,
+   "event_id": "evt-84c2efb0ce3b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 17,
+   "line": 18,
+   "event_id": "evt-b4d0de19893e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 18,
+   "line": 19,
+   "event_id": "evt-b752e60d400f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 19,
+   "line": 20,
+   "event_id": "evt-91c475961b93",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 20,
+   "line": 21,
+   "event_id": "evt-2223f157f169",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 21,
+   "line": 22,
+   "event_id": "evt-b4430e60ec16",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 22,
+   "line": 23,
+   "event_id": "evt-ac1cf1c056ba",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 23,
+   "line": 24,
+   "event_id": "evt-4685ac17cb47",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 24,
+   "line": 25,
+   "event_id": "evt-1ff489463e85",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-D-0001"
+   ]
+  },
+  {
+   "index": 25,
+   "line": 26,
+   "event_id": "evt-c7745543fc3c",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0002"
+   ]
+  },
+  {
+   "index": 26,
+   "line": 27,
+   "event_id": "evt-19dbddd1dfb2",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0001"
+   ]
+  },
+  {
+   "index": 27,
+   "line": 28,
+   "event_id": "evt-ab9035a240ae",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0001"
+   ]
+  },
+  {
+   "index": 28,
+   "line": 29,
+   "event_id": "evt-af423838b326",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0001"
+   ]
+  },
+  {
+   "index": 29,
+   "line": 30,
+   "event_id": "evt-451b6123fdf7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0001"
+   ]
+  },
+  {
+   "index": 30,
+   "line": 31,
+   "event_id": "evt-e27a654821d0",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0001"
+   ]
+  },
+  {
+   "index": 31,
+   "line": 32,
+   "event_id": "evt-50b9c03832d0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 32,
+   "line": 33,
+   "event_id": "evt-82af138d994c",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0002"
+   ]
+  },
+  {
+   "index": 33,
+   "line": 34,
+   "event_id": "evt-f7ba802a63cc",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 34,
+   "line": 35,
+   "event_id": "evt-815a6c35e33c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 35,
+   "line": 36,
+   "event_id": "evt-af423838b326",
+   "expected_status": "duplicate",
+   "duplicate_kind": "exact",
+   "duplicate_of_index": 28,
+   "scenario_ids": [
+    "SCN-F-0001"
+   ]
+  },
+  {
+   "index": 36,
+   "line": 37,
+   "event_id": "evt-0447c6a22085",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 37,
+   "line": 38,
+   "event_id": "evt-87d51d30d990",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0002"
+   ]
+  },
+  {
+   "index": 38,
+   "line": 39,
+   "event_id": "evt-9ad88aacb783",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 39,
+   "line": 40,
+   "event_id": "evt-a1235c532042",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "confidence_above_one"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 40,
+   "line": 41,
+   "event_id": "evt-57e2d8e66501",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 41,
+   "line": 42,
+   "event_id": "evt-79dd1558cc6d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 42,
+   "line": 43,
+   "event_id": "evt-983294340a03",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 43,
+   "line": 44,
+   "event_id": "evt-dfde3ff350bf",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 44,
+   "line": 45,
+   "event_id": "evt-ed3043e458fc",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 45,
+   "line": 46,
+   "event_id": "evt-66aadd59ba71",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 46,
+   "line": 47,
+   "event_id": "evt-30b1310c0c00",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 47,
+   "line": 48,
+   "event_id": "evt-0cf319108be5",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 48,
+   "line": 49,
+   "event_id": "evt-c88afed4057d",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 49,
+   "line": 50,
+   "event_id": "evt-f5f50e8fa8e0",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 50,
+   "line": 51,
+   "event_id": "evt-c0e9ed2662e9",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 51,
+   "line": 52,
+   "event_id": "evt-97f474d99fb1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 52,
+   "line": 53,
+   "event_id": "evt-f7fd37bb3eec",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 53,
+   "line": 54,
+   "event_id": "evt-0cd60ea2622b",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 54,
+   "line": 55,
+   "event_id": "evt-dca0acdabacc",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0001"
+   ]
+  },
+  {
+   "index": 55,
+   "line": 56,
+   "event_id": "evt-e75eb5950807",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 56,
+   "line": 57,
+   "event_id": "evt-8d3b56726735",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 57,
+   "line": 58,
+   "event_id": "evt-01c311e12ee9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 58,
+   "line": 59,
+   "event_id": "evt-d51ff17daa26",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 59,
+   "line": 60,
+   "event_id": "evt-5bba0aa5aaf2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 60,
+   "line": 61,
+   "event_id": "evt-7a1112e29c2a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 61,
+   "line": 62,
+   "event_id": "evt-d27e4c7f9cd6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 62,
+   "line": 63,
+   "event_id": "evt-ba75283348ea",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "timestamp_missing_timezone"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 63,
+   "line": 64,
+   "event_id": "evt-d2f1a61bdc7d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 64,
+   "line": 65,
+   "event_id": "evt-da4ad18ee31b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 65,
+   "line": 66,
+   "event_id": "evt-beeace2de105",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 66,
+   "line": 67,
+   "event_id": "evt-a65eabf3ad39",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0001"
+   ]
+  },
+  {
+   "index": 67,
+   "line": 68,
+   "event_id": "evt-1efa7394988f",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0001"
+   ]
+  },
+  {
+   "index": 68,
+   "line": 69,
+   "event_id": "evt-a18fb535106e",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0001"
+   ]
+  },
+  {
+   "index": 69,
+   "line": 70,
+   "event_id": "evt-44964a7a677b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 70,
+   "line": 71,
+   "event_id": "evt-10287938ce7f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 71,
+   "line": 72,
+   "event_id": "evt-2dba4a12c64f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 72,
+   "line": 73,
+   "event_id": "evt-4b1bb6448d24",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 73,
+   "line": 74,
+   "event_id": "evt-25fdfbb61ff7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 74,
+   "line": 75,
+   "event_id": "evt-d3ec35f2e254",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 75,
+   "line": 76,
+   "event_id": "evt-1c7b4969b2a1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 76,
+   "line": 77,
+   "event_id": "evt-fd59e9b9339e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 77,
+   "line": 78,
+   "event_id": "evt-2337fffe77c8",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 78,
+   "line": 79,
+   "event_id": "evt-19e4c9c23e69",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 79,
+   "line": 80,
+   "event_id": "evt-5cd304aac1b7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 80,
+   "line": 81,
+   "event_id": "evt-e238bd17c5e8",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 81,
+   "line": 82,
+   "event_id": "evt-2989277d1be9",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 82,
+   "line": 83,
+   "event_id": "evt-d02c54170a17",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 83,
+   "line": 84,
+   "event_id": "evt-c42ce05b46c5",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 84,
+   "line": 85,
+   "event_id": "evt-cf1d9feefdff",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 85,
+   "line": 86,
+   "event_id": "evt-bd20f275b5f3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 86,
+   "line": 87,
+   "event_id": "evt-4f4015b02530",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 87,
+   "line": 88,
+   "event_id": "evt-692e0b2f6d5c",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 88,
+   "line": 89,
+   "event_id": "evt-71b7f836f571",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 89,
+   "line": 90,
+   "event_id": "evt-72ecc8a723e9",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 90,
+   "line": 91,
+   "event_id": "evt-a56117ec889c",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 91,
+   "line": 92,
+   "event_id": "evt-f29a577bc55a",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 92,
+   "line": 93,
+   "event_id": "evt-4f393d3a2582",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0003"
+   ]
+  },
+  {
+   "index": 93,
+   "line": 94,
+   "event_id": "evt-e5d76dadd6c7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 94,
+   "line": 95,
+   "event_id": "evt-ff5eff50bde4",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 95,
+   "line": 96,
+   "event_id": "evt-0c0fc17af08a",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 96,
+   "line": 97,
+   "event_id": "evt-cac528f49481",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 97,
+   "line": 98,
+   "event_id": "evt-61b162801c45",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 98,
+   "line": 99,
+   "event_id": "evt-b881ae270da7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 99,
+   "line": 100,
+   "event_id": "evt-82ff2310c9fb",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 100,
+   "line": 101,
+   "event_id": "evt-fe33e8e91639",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 101,
+   "line": 102,
+   "event_id": "evt-6f4c4b22d308",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-B-0001"
+   ]
+  },
+  {
+   "index": 102,
+   "line": 103,
+   "event_id": "evt-fe33e8e91639",
+   "expected_status": "duplicate",
+   "duplicate_kind": "exact",
+   "duplicate_of_index": 100,
+   "scenario_ids": [
+    "SCN-F-0009"
+   ]
+  },
+  {
+   "index": 103,
+   "line": 104,
+   "event_id": "evt-0c0fc17af08a",
+   "expected_status": "duplicate",
+   "duplicate_kind": "conflicting",
+   "duplicate_of_index": 95,
+   "scenario_ids": [
+    "SCN-F-0002"
+   ]
+  },
+  {
+   "index": 104,
+   "line": 105,
+   "event_id": "evt-6e1bca208c07",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 105,
+   "line": 106,
+   "event_id": "evt-302da555dfa1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 106,
+   "line": 107,
+   "event_id": "evt-63bb731171a7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 107,
+   "line": 108,
+   "event_id": "evt-595b1b972332",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 108,
+   "line": 109,
+   "event_id": "evt-7ff38babb414",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 109,
+   "line": 110,
+   "event_id": "evt-9cc1c36db2ec",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 110,
+   "line": 111,
+   "event_id": "evt-fd5b7da23e1b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 111,
+   "line": 112,
+   "event_id": "evt-e0f1f0b5b7b3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 112,
+   "line": 113,
+   "event_id": "evt-8ec4aefb4b37",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 113,
+   "line": 114,
+   "event_id": "evt-288568e0c800",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 114,
+   "line": 115,
+   "event_id": "evt-b040a28e0841",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 115,
+   "line": 116,
+   "event_id": "evt-5842d3105f4f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 116,
+   "line": 117,
+   "event_id": "evt-a632ff712ff4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 117,
+   "line": 118,
+   "event_id": "evt-91f2db029414",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 118,
+   "line": 119,
+   "event_id": "evt-d4ee8c487218",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 119,
+   "line": 120,
+   "event_id": "evt-9e6e076f3b07",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 120,
+   "line": 121,
+   "event_id": "evt-9ad7bd9ab6d9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 121,
+   "line": 122,
+   "event_id": "evt-335a66c3f832",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 122,
+   "line": 123,
+   "event_id": "evt-0b9403fde24e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 123,
+   "line": 124,
+   "event_id": "evt-0818b5b81351",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0006"
+   ]
+  },
+  {
+   "index": 124,
+   "line": 125,
+   "event_id": "evt-73b05f2019ea",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0006"
+   ]
+  },
+  {
+   "index": 125,
+   "line": 126,
+   "event_id": "evt-adfcf8c43f7a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 126,
+   "line": 127,
+   "event_id": "evt-17a843b93b02",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 127,
+   "line": 128,
+   "event_id": "evt-32d521bd1db7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 128,
+   "line": 129,
+   "event_id": "evt-6761b79ee140",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 129,
+   "line": 130,
+   "event_id": "evt-7cb8864b789a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 130,
+   "line": 131,
+   "event_id": "evt-6009b265293e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 131,
+   "line": 132,
+   "event_id": "evt-696f4084a290",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 132,
+   "line": 133,
+   "event_id": "evt-8edd536019db",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 133,
+   "line": 134,
+   "event_id": "evt-2839a99f8c03",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 134,
+   "line": 135,
+   "event_id": "evt-244815663d1a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 135,
+   "line": 136,
+   "event_id": "evt-4a2c2cdb1625",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 136,
+   "line": 137,
+   "event_id": "evt-415f424f8429",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 137,
+   "line": 138,
+   "event_id": "evt-b8a4f105c2d8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 138,
+   "line": 139,
+   "event_id": "evt-31dea48339f7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 139,
+   "line": 140,
+   "event_id": "evt-ebc02233212a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 140,
+   "line": 141,
+   "event_id": "evt-d9475c613985",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 141,
+   "line": 142,
+   "event_id": "evt-ecdcded21b15",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 142,
+   "line": 143,
+   "event_id": "evt-6a20e8b81813",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 143,
+   "line": 144,
+   "event_id": "evt-5fd9ca5edf38",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 144,
+   "line": 145,
+   "event_id": "evt-5af1c8ee46bf",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "wrong_type_device_id"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 145,
+   "line": 146,
+   "event_id": "evt-dcc74598ab17",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 146,
+   "line": 147,
+   "event_id": "evt-e0083ecf5f0a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 147,
+   "line": 148,
+   "event_id": "evt-25373749af64",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 148,
+   "line": 149,
+   "event_id": "evt-d17b2195e073",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 149,
+   "line": 150,
+   "event_id": "evt-291ccb2c0efb",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 150,
+   "line": 151,
+   "event_id": "evt-a5f68c1a6477",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 151,
+   "line": 152,
+   "event_id": "evt-6c0953f42383",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 152,
+   "line": 153,
+   "event_id": "evt-4ab3f262e145",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 153,
+   "line": 154,
+   "event_id": "evt-31c0a091129b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 154,
+   "line": 155,
+   "event_id": "evt-2da647ad21dd",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 155,
+   "line": 156,
+   "event_id": "evt-9b248fe88b77",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 156,
+   "line": 157,
+   "event_id": "evt-f219c1b156bd",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 157,
+   "line": 158,
+   "event_id": "evt-83f0dfaa8505",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "wrong_type_confidence"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 158,
+   "line": 159,
+   "event_id": "evt-9b587c8d8aef",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 159,
+   "line": 160,
+   "event_id": "evt-389753199080",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 160,
+   "line": 161,
+   "event_id": "evt-ce55b68d6f38",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 161,
+   "line": 162,
+   "event_id": "evt-5b2d53c45254",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 162,
+   "line": 163,
+   "event_id": "evt-77435953ff90",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 163,
+   "line": 164,
+   "event_id": "evt-e7b45c798b20",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 164,
+   "line": 165,
+   "event_id": "evt-c68ed87db947",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 165,
+   "line": 166,
+   "event_id": "evt-59b71117f840",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 166,
+   "line": 167,
+   "event_id": "evt-2494b61ae1b0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 167,
+   "line": 168,
+   "event_id": "evt-11535c508720",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 168,
+   "line": 169,
+   "event_id": "evt-81f3fd034ada",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 169,
+   "line": 170,
+   "event_id": "evt-a837bba205ca",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 170,
+   "line": 171,
+   "event_id": "evt-2227551ff086",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 171,
+   "line": 172,
+   "event_id": "evt-e5dc5fbbdfd7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 172,
+   "line": 173,
+   "event_id": "evt-4e764baf0f5e",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0005"
+   ]
+  },
+  {
+   "index": 173,
+   "line": 174,
+   "event_id": "evt-6d15b7b8c1a5",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0005"
+   ]
+  },
+  {
+   "index": 174,
+   "line": 175,
+   "event_id": "evt-e7b7d6312a80",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 175,
+   "line": 176,
+   "event_id": "evt-933683efa9f3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 176,
+   "line": 177,
+   "event_id": "evt-752af1901b7e",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 177,
+   "line": 178,
+   "event_id": "evt-e2c333107475",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 178,
+   "line": 179,
+   "event_id": "evt-1448e7e646c7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 179,
+   "line": 180,
+   "event_id": "evt-f0b28c7e6f42",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0004"
+   ]
+  },
+  {
+   "index": 180,
+   "line": 181,
+   "event_id": "evt-e2c333107475",
+   "expected_status": "duplicate",
+   "duplicate_kind": "exact",
+   "duplicate_of_index": 177,
+   "scenario_ids": [
+    "SCN-F-0003"
+   ]
+  },
+  {
+   "index": 181,
+   "line": 182,
+   "event_id": "evt-ebac8b2e1eb3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 182,
+   "line": 183,
+   "event_id": "evt-b79fb907e44b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 183,
+   "line": 184,
+   "event_id": "evt-047c6ac475a5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 184,
+   "line": 185,
+   "event_id": "evt-5e054e45a736",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 185,
+   "line": 186,
+   "event_id": "evt-d3f42cba1bc6",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "missing_occurred_at"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 186,
+   "line": 187,
+   "event_id": "evt-8191e8a91aba",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 187,
+   "line": 188,
+   "event_id": "evt-9fe7d847260b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 188,
+   "line": 189,
+   "event_id": "evt-78dc4051391c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 189,
+   "line": 190,
+   "event_id": "evt-ce96bc8b7eb7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 190,
+   "line": 191,
+   "event_id": "evt-89145cb27033",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 191,
+   "line": 192,
+   "event_id": "evt-25dba5349425",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 192,
+   "line": 193,
+   "event_id": "evt-30e3b66c4a03",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 193,
+   "line": 194,
+   "event_id": "evt-6001960b9746",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 194,
+   "line": 195,
+   "event_id": "evt-60106b7f0864",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 195,
+   "line": 196,
+   "event_id": "evt-e595e18258d2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 196,
+   "line": 197,
+   "event_id": "evt-208a3366da87",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 197,
+   "line": 198,
+   "event_id": "evt-7d10ca8b6e4c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 198,
+   "line": 199,
+   "event_id": "evt-a7dedda4f4a7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0004"
+   ]
+  },
+  {
+   "index": 199,
+   "line": 200,
+   "event_id": "evt-f94556cb1ab0",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0004"
+   ]
+  },
+  {
+   "index": 200,
+   "line": 201,
+   "event_id": "evt-de99a0f35470",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 201,
+   "line": 202,
+   "event_id": "evt-18edacb83fce",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 202,
+   "line": 203,
+   "event_id": "evt-625256ef26a3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 203,
+   "line": 204,
+   "event_id": "evt-66b1adb5d5e6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 204,
+   "line": 205,
+   "event_id": "evt-1847378ce7b7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 205,
+   "line": 206,
+   "event_id": "evt-4cfaa6e997ae",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 206,
+   "line": 207,
+   "event_id": "evt-fa4c0ecc9ff5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 207,
+   "line": 208,
+   "event_id": "evt-4632c45d4c03",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 208,
+   "line": 209,
+   "event_id": "evt-1ef8898f3586",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 209,
+   "line": 210,
+   "event_id": "evt-40e07cfbc186",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 210,
+   "line": 211,
+   "event_id": "evt-25dba5349425",
+   "expected_status": "duplicate",
+   "duplicate_kind": "conflicting",
+   "duplicate_of_index": 191,
+   "scenario_ids": [
+    "SCN-F-0010"
+   ]
+  },
+  {
+   "index": 211,
+   "line": 212,
+   "event_id": "evt-6bafda095b0c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 212,
+   "line": 213,
+   "event_id": "evt-7eb6edc78d7b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 213,
+   "line": 214,
+   "event_id": "evt-823c415a53c1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 214,
+   "line": 215,
+   "event_id": "evt-1292ef8c485b",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0001"
+   ]
+  },
+  {
+   "index": 215,
+   "line": 216,
+   "event_id": "evt-43e48181a8cc",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0001"
+   ]
+  },
+  {
+   "index": 216,
+   "line": 217,
+   "event_id": "evt-702c286218b8",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0001"
+   ]
+  },
+  {
+   "index": 217,
+   "line": 218,
+   "event_id": "evt-4567ad3b1b9d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 218,
+   "line": 219,
+   "event_id": "evt-5e7f3c33499f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 219,
+   "line": 220,
+   "event_id": "evt-bc10f1eef895",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 220,
+   "line": 221,
+   "event_id": "evt-705c7c9428af",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 221,
+   "line": 222,
+   "event_id": "evt-528739a8ab5e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 222,
+   "line": 223,
+   "event_id": "evt-9599390f516d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 223,
+   "line": 224,
+   "event_id": "evt-8d87271dd0f1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 224,
+   "line": 225,
+   "event_id": "evt-996de3a060f1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 225,
+   "line": 226,
+   "event_id": "evt-97f301fe1d86",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 226,
+   "line": 227,
+   "event_id": "evt-16f21a936d0c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 227,
+   "line": 228,
+   "event_id": "evt-112ea266530e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 228,
+   "line": 229,
+   "event_id": "evt-1b1bf9834d4b",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "invalid_timestamp_format"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 229,
+   "line": 230,
+   "event_id": "evt-69edbb81c774",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 230,
+   "line": 231,
+   "event_id": "evt-82f5ed696cb3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 231,
+   "line": 232,
+   "event_id": "evt-6fac0ad45230",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 232,
+   "line": 233,
+   "event_id": "evt-f2004d29d1ab",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 233,
+   "line": 234,
+   "event_id": "evt-ab05d556b37d",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 234,
+   "line": 235,
+   "event_id": "evt-86e57c93f6cc",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 235,
+   "line": 236,
+   "event_id": "evt-7f5401fa964e",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 236,
+   "line": 237,
+   "event_id": "evt-5324f758dce2",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-A-0002"
+   ]
+  },
+  {
+   "index": 237,
+   "line": 238,
+   "event_id": "evt-11d0f19293c9",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "unknown_source_type"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 238,
+   "line": 239,
+   "event_id": "evt-f9cfa1420851",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 239,
+   "line": 240,
+   "event_id": "evt-fe6635edff38",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 240,
+   "line": 241,
+   "event_id": "evt-c9161c968b9b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 241,
+   "line": 242,
+   "event_id": "evt-58c6fe65b782",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 242,
+   "line": 243,
+   "event_id": "evt-e47cff26cb58",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 243,
+   "line": 244,
+   "event_id": "evt-8209e03f7c17",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 244,
+   "line": 245,
+   "event_id": "evt-0c5c57537534",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 245,
+   "line": 246,
+   "event_id": "evt-a07c1ce2ec5b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 246,
+   "line": 247,
+   "event_id": "evt-25f5c5e2cdcc",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 247,
+   "line": 248,
+   "event_id": "evt-0a80e5582e16",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0002"
+   ]
+  },
+  {
+   "index": 248,
+   "line": 249,
+   "event_id": "evt-524f30307633",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0002"
+   ]
+  },
+  {
+   "index": 249,
+   "line": 250,
+   "event_id": "evt-08426726f5b4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 250,
+   "line": 251,
+   "event_id": "evt-113620509c62",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 251,
+   "line": 252,
+   "event_id": "evt-62025cb5e69c",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 252,
+   "line": 253,
+   "event_id": "evt-f2e6732e2016",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 253,
+   "line": 254,
+   "event_id": "evt-92ec13aec376",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 254,
+   "line": 255,
+   "event_id": "evt-a649507b9072",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 255,
+   "line": 256,
+   "event_id": "evt-bc5506a241af",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 256,
+   "line": 257,
+   "event_id": "evt-8fc9e9ddebf5",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 257,
+   "line": 258,
+   "event_id": "evt-723eb43bd27f",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 258,
+   "line": 259,
+   "event_id": "evt-ea9eb1a8b71f",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 259,
+   "line": 260,
+   "event_id": "evt-12f5da52d2ee",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0003"
+   ]
+  },
+  {
+   "index": 260,
+   "line": 261,
+   "event_id": "evt-7bbc474f9205",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 261,
+   "line": 262,
+   "event_id": "evt-7977b4cc7214",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 262,
+   "line": 263,
+   "event_id": "evt-07e8e4fa6417",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 263,
+   "line": 264,
+   "event_id": "evt-4db9d59dcbfa",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 264,
+   "line": 265,
+   "event_id": "evt-c8778f97b21d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 265,
+   "line": 266,
+   "event_id": "evt-dd719780fe9b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 266,
+   "line": 267,
+   "event_id": "evt-e4dc72847156",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 267,
+   "line": 268,
+   "event_id": "evt-5ef39d85aa72",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 268,
+   "line": 269,
+   "event_id": "evt-f6892ca26887",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 269,
+   "line": 270,
+   "event_id": "evt-933890208d23",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 270,
+   "line": 271,
+   "event_id": "evt-c0a47dd7fc59",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 271,
+   "line": 272,
+   "event_id": "evt-7dff9b125dfb",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "missing_source_type"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 272,
+   "line": 273,
+   "event_id": "evt-e8c5c6c55054",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 273,
+   "line": 274,
+   "event_id": "evt-09cc745f4433",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 274,
+   "line": 275,
+   "event_id": "evt-dd920db977a9",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0002"
+   ]
+  },
+  {
+   "index": 275,
+   "line": 276,
+   "event_id": "evt-d0b131f3f0c0",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0002"
+   ]
+  },
+  {
+   "index": 276,
+   "line": 277,
+   "event_id": "evt-5d9dddbb3fa4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 277,
+   "line": 278,
+   "event_id": "evt-5f6f539b4d73",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 278,
+   "line": 279,
+   "event_id": "evt-9e54af1e6596",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 279,
+   "line": 280,
+   "event_id": "evt-5a57b0dc80e8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 280,
+   "line": 281,
+   "event_id": "evt-e5aa7be75206",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 281,
+   "line": 282,
+   "event_id": "evt-04ca3506e337",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 282,
+   "line": 283,
+   "event_id": "evt-420fd45b4e9b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 283,
+   "line": 284,
+   "event_id": "evt-af3278cf536a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 284,
+   "line": 285,
+   "event_id": "evt-da1ede6a7c6e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 285,
+   "line": 286,
+   "event_id": "evt-295bc333e861",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-C-0001"
+   ]
+  },
+  {
+   "index": 286,
+   "line": 287,
+   "event_id": "evt-7d1552fbe43b",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-C-0001"
+   ]
+  },
+  {
+   "index": 287,
+   "line": 288,
+   "event_id": "evt-fc3ee0f3eab0",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-C-0001"
+   ]
+  },
+  {
+   "index": 288,
+   "line": 289,
+   "event_id": "evt-f9a693efe8f0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 289,
+   "line": 290,
+   "event_id": "evt-bb5e15ed6269",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-C-0001"
+   ]
+  },
+  {
+   "index": 290,
+   "line": 291,
+   "event_id": "evt-c2fcb3ef29d7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 291,
+   "line": 292,
+   "event_id": "evt-85df91136499",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 292,
+   "line": 293,
+   "event_id": "evt-297e037ce599",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 293,
+   "line": 294,
+   "event_id": "evt-6b0c09efa19b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 294,
+   "line": 295,
+   "event_id": "evt-90535f4dec1d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 295,
+   "line": 296,
+   "event_id": "evt-0dc5f5bce0c0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 296,
+   "line": 297,
+   "event_id": "evt-fa3bc4844743",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 297,
+   "line": 298,
+   "event_id": "evt-d385d2a2f839",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0007"
+   ]
+  },
+  {
+   "index": 298,
+   "line": 299,
+   "event_id": "evt-19a228a3d3a3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 299,
+   "line": 300,
+   "event_id": "evt-6d1e140296ee",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 300,
+   "line": 301,
+   "event_id": "evt-f77e0c15cb28",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 301,
+   "line": 302,
+   "event_id": "evt-af3278cf536a",
+   "expected_status": "duplicate",
+   "duplicate_kind": "conflicting",
+   "duplicate_of_index": 283,
+   "scenario_ids": [
+    "SCN-F-0004"
+   ]
+  },
+  {
+   "index": 302,
+   "line": 303,
+   "event_id": "evt-6dc7cd40b648",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "confidence_negative"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 303,
+   "line": 304,
+   "event_id": "evt-6e52af178dbb",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 304,
+   "line": 305,
+   "event_id": "evt-66692d78f04b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 305,
+   "line": 306,
+   "event_id": "evt-ffdb52e6ef74",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 306,
+   "line": 307,
+   "event_id": "evt-bbbb8d8e352b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 307,
+   "line": 308,
+   "event_id": "evt-c1cd5738b277",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 308,
+   "line": 309,
+   "event_id": "evt-fa33c64d8e70",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 309,
+   "line": 310,
+   "event_id": "evt-a082427f6635",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 310,
+   "line": 311,
+   "event_id": "evt-75e86af01106",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 311,
+   "line": 312,
+   "event_id": "evt-ede0a36d7567",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 312,
+   "line": 313,
+   "event_id": "evt-2d495f84e3c5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 313,
+   "line": 314,
+   "event_id": "evt-4d31e1878e93",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 314,
+   "line": 315,
+   "event_id": "evt-2700c2ce56bd",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 315,
+   "line": 316,
+   "event_id": "evt-5cf9c53f777f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 316,
+   "line": 317,
+   "event_id": "evt-fa3bc4844743",
+   "expected_status": "duplicate",
+   "duplicate_kind": "conflicting",
+   "duplicate_of_index": 296,
+   "scenario_ids": [
+    "SCN-F-0006"
+   ]
+  },
+  {
+   "index": 317,
+   "line": 318,
+   "event_id": "evt-76c5e9fdd358",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 318,
+   "line": 319,
+   "event_id": "evt-48e6740da9d6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 319,
+   "line": 320,
+   "event_id": "evt-7b1e24cf8629",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 320,
+   "line": 321,
+   "event_id": "evt-5c39bc0dbd13",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0008"
+   ]
+  },
+  {
+   "index": 321,
+   "line": 322,
+   "event_id": "evt-b68c79ac446d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 322,
+   "line": 323,
+   "event_id": "evt-fb04022ba960",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 323,
+   "line": 324,
+   "event_id": "evt-4c9859afb1d1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 324,
+   "line": 325,
+   "event_id": "evt-e414d9743ff0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 325,
+   "line": 326,
+   "event_id": "evt-05198a2e30d6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 326,
+   "line": 327,
+   "event_id": "evt-418afa7de961",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 327,
+   "line": 328,
+   "event_id": "evt-2e3de504d1c6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 328,
+   "line": 329,
+   "event_id": "evt-a44446633755",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 329,
+   "line": 330,
+   "event_id": "evt-4d5905ffa2f2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 330,
+   "line": 331,
+   "event_id": "evt-a923c34604f9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 331,
+   "line": 332,
+   "event_id": "evt-f2d603a3574a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 332,
+   "line": 333,
+   "event_id": "evt-62f5adaa44ca",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0003"
+   ]
+  },
+  {
+   "index": 333,
+   "line": 334,
+   "event_id": "evt-f6e3a8149562",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0003"
+   ]
+  },
+  {
+   "index": 334,
+   "line": 335,
+   "event_id": "evt-ab004ac81bda",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 335,
+   "line": 336,
+   "event_id": "evt-2b2318720dc7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 336,
+   "line": 337,
+   "event_id": "evt-59c07c45d65d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 337,
+   "line": 338,
+   "event_id": "evt-585b4002c5eb",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 338,
+   "line": 339,
+   "event_id": "evt-55e1d8bb62b7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 339,
+   "line": 340,
+   "event_id": "evt-bc1102bbc915",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 340,
+   "line": 341,
+   "event_id": "evt-9bc84688d612",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 341,
+   "line": 342,
+   "event_id": "evt-a2a32c47a51f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 342,
+   "line": 343,
+   "event_id": "evt-ad684cd3a6a4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 343,
+   "line": 344,
+   "event_id": "evt-5bad7366c606",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 344,
+   "line": 345,
+   "event_id": "evt-a4f717a15a60",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 345,
+   "line": 346,
+   "event_id": "evt-fe50293a60be",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 346,
+   "line": 347,
+   "event_id": "evt-248203d33907",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 347,
+   "line": 348,
+   "event_id": "evt-56d207faf6f7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0005"
+   ]
+  },
+  {
+   "index": 348,
+   "line": 349,
+   "event_id": "evt-bf3246586cb2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 349,
+   "line": 350,
+   "event_id": "evt-7458a1da7c7a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 350,
+   "line": 351,
+   "event_id": "evt-a263c186cbce",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 351,
+   "line": 352,
+   "event_id": "evt-ce9efcbb4e59",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0001"
+   ]
+  },
+  {
+   "index": 352,
+   "line": 353,
+   "event_id": "evt-93ef86e5edf4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 353,
+   "line": 354,
+   "event_id": "evt-0cbd9e2aa4ac",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0001"
+   ]
+  },
+  {
+   "index": 354,
+   "line": 355,
+   "event_id": "evt-22b60a14b309",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 355,
+   "line": 356,
+   "event_id": "evt-c35b1578d709",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0003"
+   ]
+  },
+  {
+   "index": 356,
+   "line": 357,
+   "event_id": "evt-25b8836b15c7",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0003"
+   ]
+  },
+  {
+   "index": 357,
+   "line": 358,
+   "event_id": "evt-2c4740061add",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 358,
+   "line": 359,
+   "event_id": "evt-82ce503eeaf2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 359,
+   "line": 360,
+   "event_id": "evt-9e796680c5e3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 360,
+   "line": 361,
+   "event_id": "evt-429eeaaa94c8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 361,
+   "line": 362,
+   "event_id": "evt-13fc7237cf5b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 362,
+   "line": 363,
+   "event_id": "evt-8ec2ee0c2303",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 363,
+   "line": 364,
+   "event_id": "evt-8db9b366ffd1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 364,
+   "line": 365,
+   "event_id": "evt-ecfa6790eee0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 365,
+   "line": 366,
+   "event_id": "evt-f42934b16488",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 366,
+   "line": 367,
+   "event_id": "evt-6c7a723764ba",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 367,
+   "line": 368,
+   "event_id": "evt-9e6a75d236e3",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 368,
+   "line": 369,
+   "event_id": "evt-6610f0b0c031",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 369,
+   "line": 370,
+   "event_id": "evt-6e8ac712cf67",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 370,
+   "line": 371,
+   "event_id": "evt-a4d572397201",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 371,
+   "line": 372,
+   "event_id": "evt-ef0e756aae2d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 372,
+   "line": 373,
+   "event_id": "evt-2f1605baec78",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 373,
+   "line": 374,
+   "event_id": "evt-0ef4900ddf16",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 374,
+   "line": 375,
+   "event_id": "evt-c33f64bf2e8c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 375,
+   "line": 376,
+   "event_id": "evt-6e4ff0ad16f7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 376,
+   "line": 377,
+   "event_id": "evt-4e90a4dd2fe1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 377,
+   "line": 378,
+   "event_id": "evt-95ee3e72e402",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 378,
+   "line": 379,
+   "event_id": "evt-08bba277279b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 379,
+   "line": 380,
+   "event_id": "evt-aa1cf0c7915e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 380,
+   "line": 381,
+   "event_id": "evt-0a4c2d6c18d0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 381,
+   "line": 382,
+   "event_id": "evt-9dc331523136",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 382,
+   "line": 383,
+   "event_id": "evt-ebeefe12ace5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 383,
+   "line": 384,
+   "event_id": "evt-5e7a753057b9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 384,
+   "line": 385,
+   "event_id": "evt-3a58a302db2f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 385,
+   "line": 386,
+   "event_id": "evt-8349bc4b2732",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 386,
+   "line": 387,
+   "event_id": "evt-581ef8ef6c71",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 387,
+   "line": 388,
+   "event_id": "evt-9dc331523136",
+   "expected_status": "duplicate",
+   "duplicate_kind": "exact",
+   "duplicate_of_index": 381,
+   "scenario_ids": [
+    "SCN-F-0005"
+   ]
+  },
+  {
+   "index": 388,
+   "line": 389,
+   "event_id": "evt-90a623f2f68f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 389,
+   "line": 390,
+   "event_id": "evt-81718f7a1e43",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 390,
+   "line": 391,
+   "event_id": "evt-d2a68c501e6e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 391,
+   "line": 392,
+   "event_id": "evt-bfac44de950f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 392,
+   "line": 393,
+   "event_id": "evt-83a27bb8373c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 393,
+   "line": 394,
+   "event_id": "evt-90a623f2f68f",
+   "expected_status": "duplicate",
+   "duplicate_kind": "conflicting",
+   "duplicate_of_index": 388,
+   "scenario_ids": [
+    "SCN-F-0008"
+   ]
+  },
+  {
+   "index": 394,
+   "line": 395,
+   "event_id": "evt-ea299914857d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 395,
+   "line": 396,
+   "event_id": "evt-677c6d234155",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 396,
+   "line": 397,
+   "event_id": "evt-d01583d03e33",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 397,
+   "line": 398,
+   "event_id": "evt-a5a7277fecc6",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "invalid_latitude"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 398,
+   "line": 399,
+   "event_id": "evt-25c1a89a92c5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 399,
+   "line": 400,
+   "event_id": "evt-a46eae4ed89f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 400,
+   "line": 401,
+   "event_id": "evt-de94205b9db8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 401,
+   "line": 402,
+   "event_id": "evt-0d3fa8c51cca",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 402,
+   "line": 403,
+   "event_id": "evt-81de0abe8257",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "invalid_timestamp_value"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 403,
+   "line": 404,
+   "event_id": "evt-6cd97123bc96",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 404,
+   "line": 405,
+   "event_id": "evt-843653edc74f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 405,
+   "line": 406,
+   "event_id": "evt-744d5c7c0778",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 406,
+   "line": 407,
+   "event_id": "evt-49d6859353fa",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 407,
+   "line": 408,
+   "event_id": "evt-56ffa812cf1b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 408,
+   "line": 409,
+   "event_id": "evt-9a3a6e3c4532",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0004"
+   ]
+  },
+  {
+   "index": 409,
+   "line": 410,
+   "event_id": "evt-c88a00af085d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 410,
+   "line": 411,
+   "event_id": "evt-6d2f9237e145",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 411,
+   "line": 412,
+   "event_id": "evt-846c5170a2ef",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 412,
+   "line": 413,
+   "event_id": "evt-13b85b693697",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 413,
+   "line": 414,
+   "event_id": "evt-6c2666d6089e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 414,
+   "line": 415,
+   "event_id": "evt-976764188dde",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 415,
+   "line": 416,
+   "event_id": "evt-5f88a0147ab9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 416,
+   "line": 417,
+   "event_id": "evt-c5fe8365d2cf",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 417,
+   "line": 418,
+   "event_id": "evt-69ff74bc405c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 418,
+   "line": 419,
+   "event_id": "evt-108154270925",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 419,
+   "line": 420,
+   "event_id": "evt-1527ce65050b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 420,
+   "line": 421,
+   "event_id": "evt-6166d3c6e5a0",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 421,
+   "line": 422,
+   "event_id": "evt-1a5878ccd788",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 422,
+   "line": 423,
+   "event_id": "evt-1a5878ccd788",
+   "expected_status": "duplicate",
+   "duplicate_kind": "exact",
+   "duplicate_of_index": 421,
+   "scenario_ids": [
+    "SCN-F-0007"
+   ]
+  },
+  {
+   "index": 423,
+   "line": 424,
+   "event_id": "evt-43577e45fee4",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 424,
+   "line": 425,
+   "event_id": "evt-487fe5e4b935",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 425,
+   "line": 426,
+   "event_id": "evt-fbc04708cf0f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 426,
+   "line": 427,
+   "event_id": "evt-83989d96bf5e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 427,
+   "line": 428,
+   "event_id": "evt-664d94b59339",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 428,
+   "line": 429,
+   "event_id": "evt-6dd46744cb9e",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0003"
+   ]
+  },
+  {
+   "index": 429,
+   "line": 430,
+   "event_id": "evt-660308683cbf",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 430,
+   "line": 431,
+   "event_id": "evt-af4c1c82780f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 431,
+   "line": 432,
+   "event_id": "evt-3574a87da2af",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 432,
+   "line": 433,
+   "event_id": "evt-4e4bd4249390",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 433,
+   "line": 434,
+   "event_id": "evt-06344d2ce796",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 434,
+   "line": 435,
+   "event_id": "evt-c4dfc4eb8e5d",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "invalid_longitude"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 435,
+   "line": 436,
+   "event_id": "evt-c51bdd7b99a6",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 436,
+   "line": 437,
+   "event_id": "evt-7872267d46e7",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 437,
+   "line": 438,
+   "event_id": "evt-42f7b8180f1c",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 438,
+   "line": 439,
+   "event_id": "evt-97186168c4a8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 439,
+   "line": 440,
+   "event_id": "evt-f819f584be73",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 440,
+   "line": 441,
+   "event_id": "evt-fc4ac8c28cfe",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 441,
+   "line": 442,
+   "event_id": "evt-ef1e2b729d66",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 442,
+   "line": 443,
+   "event_id": "evt-df9406444f36",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 443,
+   "line": 444,
+   "event_id": "evt-f69f578e911f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 444,
+   "line": 445,
+   "event_id": "evt-c82e10287c78",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 445,
+   "line": 446,
+   "event_id": "evt-def42d49d235",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 446,
+   "line": 447,
+   "event_id": "evt-025f90884400",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 447,
+   "line": 448,
+   "event_id": "evt-995bf5b127e1",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 448,
+   "line": 449,
+   "event_id": "evt-831f29fd9b08",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 449,
+   "line": 450,
+   "event_id": "evt-0ae424dc1ee5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 450,
+   "line": 451,
+   "event_id": "evt-c7f787184322",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 451,
+   "line": 452,
+   "event_id": "evt-7175dcadfda8",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 452,
+   "line": 453,
+   "event_id": "evt-6c4c623ad0fc",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-I-0001"
+   ]
+  },
+  {
+   "index": 453,
+   "line": 454,
+   "event_id": "evt-5adeebb48c9e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 454,
+   "line": 455,
+   "event_id": "evt-7b48460f01a5",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 455,
+   "line": 456,
+   "event_id": "evt-7e287a506f60",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 456,
+   "line": 457,
+   "event_id": "evt-4cccf02a2956",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 457,
+   "line": 458,
+   "event_id": "evt-61c2c7332304",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0003"
+   ]
+  },
+  {
+   "index": 458,
+   "line": 459,
+   "event_id": "evt-dd24778eedb3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0001"
+   ]
+  },
+  {
+   "index": 459,
+   "line": 460,
+   "event_id": "evt-a8b318d0752b",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0001"
+   ]
+  },
+  {
+   "index": 460,
+   "line": 461,
+   "event_id": "evt-c8dc3e351128",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0001"
+   ]
+  },
+  {
+   "index": 461,
+   "line": 462,
+   "event_id": "evt-21df8a0b3c33",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-G-0001"
+   ]
+  },
+  {
+   "index": 462,
+   "line": 463,
+   "event_id": "evt-208be6e005dd",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 463,
+   "line": 464,
+   "event_id": "evt-a4240d5ba7cd",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-K-0003"
+   ]
+  },
+  {
+   "index": 464,
+   "line": 465,
+   "event_id": "evt-a1a271348c2a",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 465,
+   "line": 466,
+   "event_id": "evt-2c6a328067a1",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 466,
+   "line": 467,
+   "event_id": "evt-a091f891b0c3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 467,
+   "line": 468,
+   "event_id": "evt-6ed5ff03f1a9",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 468,
+   "line": 469,
+   "event_id": "evt-5e650e9058b6",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 469,
+   "line": 470,
+   "event_id": "evt-9050c1235c91",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 470,
+   "line": 471,
+   "event_id": "evt-81e05a18e2a3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 471,
+   "line": 472,
+   "event_id": "evt-daf4fa34d2e8",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 472,
+   "line": 473,
+   "event_id": "evt-9082e1cde87f",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 473,
+   "line": 474,
+   "event_id": "evt-2d59134a5a2f",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 474,
+   "line": 475,
+   "event_id": "evt-d0a6a53bc024",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-J-0002"
+   ]
+  },
+  {
+   "index": 475,
+   "line": 476,
+   "event_id": "evt-594203d301cf",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 476,
+   "line": 477,
+   "event_id": "evt-c316ce64debe",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 477,
+   "line": 478,
+   "event_id": "evt-712c3222504f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 478,
+   "line": 479,
+   "event_id": "evt-35d03baada26",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 479,
+   "line": 480,
+   "event_id": "evt-5b69f8e9ed27",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 480,
+   "line": 481,
+   "event_id": "evt-cc57871b0b1f",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 481,
+   "line": 482,
+   "event_id": "evt-9038ae3dc742",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 482,
+   "line": 483,
+   "event_id": "evt-8d5a34f3ab8e",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 483,
+   "line": 484,
+   "event_id": "evt-06d3ee33688d",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0004"
+   ]
+  },
+  {
+   "index": 484,
+   "line": 485,
+   "event_id": "evt-14e4fe9936a3",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0004"
+   ]
+  },
+  {
+   "index": 485,
+   "line": 486,
+   "event_id": "evt-6fcc168fae12",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0002"
+   ]
+  },
+  {
+   "index": 486,
+   "line": 487,
+   "event_id": "evt-6f883e49fd09",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-E-0002"
+   ]
+  },
+  {
+   "index": 487,
+   "line": 488,
+   "event_id": "evt-8e8c359d65ae",
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "missing_device_id"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 488,
+   "line": 489,
+   "event_id": "evt-812a15969802",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0002"
+   ]
+  },
+  {
+   "index": 489,
+   "line": 490,
+   "event_id": "evt-4a109b99f012",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 490,
+   "line": 491,
+   "event_id": "evt-312840b1fb20",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 491,
+   "line": 492,
+   "event_id": "evt-fdb17010ed13",
+   "expected_status": "accepted",
+   "scenario_ids": [
+    "SCN-L-0002"
+   ]
+  },
+  {
+   "index": 492,
+   "line": 493,
+   "event_id": "evt-8cd56001e75d",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 493,
+   "line": 494,
+   "event_id": "evt-e9210b72d0ef",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 494,
+   "line": 495,
+   "event_id": "evt-73db4e998b76",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 495,
+   "line": 496,
+   "event_id": "evt-1d10a91decb2",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 496,
+   "line": 497,
+   "event_id": null,
+   "expected_status": "invalid",
+   "invalid_reasons": [
+    "missing_event_id"
+   ],
+   "scenario_ids": [
+    "SCN-H-0001"
+   ]
+  },
+  {
+   "index": 497,
+   "line": 498,
+   "event_id": "evt-d891b4d4813a",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 498,
+   "line": 499,
+   "event_id": "evt-a308cf367c1b",
+   "expected_status": "accepted"
+  },
+  {
+   "index": 499,
+   "line": 500,
+   "event_id": "evt-6007f2b1068a",
+   "expected_status": "accepted"
+  }
+ ]
+}

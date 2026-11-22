@@ -1,0 +1,11 @@
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.4
+pydantic-settings==2.7.0
+SQLAlchemy==2.0.36
+# IANA time-zone data for briefing time zones (zoneinfo) where the OS has no zoneinfo database
+tzdata==2025.2
+
+# Testing
+pytest==8.3.4
+httpx==0.28.1

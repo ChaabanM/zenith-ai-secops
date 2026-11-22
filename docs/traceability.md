@@ -45,8 +45,8 @@ This matrix covers every mandatory requirement in Sections 1–11 of the *Detail
 | 9 | Submit valid/invalid/duplicate/delayed/conflicting/malformed events; ≥ 50k events; responsive, no crashes; IDs preserved; related grouped; unrelated separate; quality and uncertainty surfaced; evidence-backed briefing | all of the above | API audit; 50K: every record checked against ground truth, full traversal (2.0 s), page latency 3.7–4.6 ms, 0 labelled false merges | pass | — |
 | 9 | Own test command | `./evaluate.sh [--benchmark]` | ran in a fresh clone and in the working copy | pass | Needs Python 3.11+ and Node 20.19+/22.12+ |
 | 10 | Source, setup instructions, Dockerfile/reproducible startup, sample data + generator, tests, API docs, architecture, design decisions, AI tools, known limitations | README + `docs/` | review | pass | — |
-| 10 | Demo video or written demo guide (≤ 5 min) | README *Demo walkthrough* (written) | review | pass (written guide) | No video recorded yet; README has a pending video-link field |
-| 10 | Public repository | GitHub | anonymous `git clone https://github.com/ChaabanM/zenith-ai-secops-platform` succeeded | pass | — |
+| 10 | Demo video or written demo guide (≤ 5 min) | README *Demo walkthrough* (written) | review | pass (written guide) | Demo video recorded (4 minutes 58 seconds) and linked in README: https://youtu.be/t5Tcaf50BOk|
+| 10 | Public repository | GitHub | anonymous `git clone https://github.com/ChaabanM/zenith-ai-secops` succeeded | pass | — |
 | 11 | All three workflows functional in one platform | Data Quality → Incident → Briefing | evidence-chain audit: submission → event → quality issue → incident → briefing and back, all references resolve | pass | — |
 
 ### Optional bonus objectives (Section 12): not implemented, by instruction

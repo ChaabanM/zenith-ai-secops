@@ -521,12 +521,12 @@ The platform uses deterministic rules, heuristic scoring, and statistical method
 
 Operational briefings are generated using evidence-grounded templates. An optional Ollama integration supports local language-model processing, while the default configuration operates without an external AI service, paid API, or GPU.
 
-AI-assisted development tools were used during implementation. The system was validated through:
+AI-assisted tools were used throughout the development process to support implementation, planning, and technical review:
 
-- Automated backend and frontend test suites.
-- Ground-truth integrity checks.
-- Record-by-record verification of 50,000-event datasets.
-- Browser-based functional testing.
-- Manual inspection of the user interface.
+Claude Code (Anthropic): Assisted with software implementation, code generation, debugging, refactoring, automated testing, and technical documentation.
+
+ChatGPT (OpenAI): Supported initial brainstorming, requirements analysis, project structuring, architectural planning, and organizing the development workflow.
+
+The implementation was evaluated through automated backend and frontend tests, ground-truth integrity checks, 50,000-event dataset evaluations, browser-based functional testing, and manual interface inspection.
 
 The main frameworks and dependencies are documented in the [Technology Stack](https://github.com/ChaabanM/zenith-ai-secops#technology-stack) section.
